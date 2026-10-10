@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Full mesh: внутренний кластер из 12 узлов и 6 внешних кластеров по 6 узлов. Всего 48 узлов и 1128 связей.">
+  <title>Ruta — full mesh топология сети</title>
+  <style>
+    :root{color-scheme:dark;--bg:#07111e;--panel:#0f2031;--border:#254153;--text:#edf8ff;--muted:#99afc4;--mint:#49e3cf;--violet:#a79dff;--blue:#75b0fa}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse 72% 35% at 50% -4%,#184160 0%,transparent 80%),#07111e;color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+    body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(#24405218 1px,transparent 1px),linear-gradient(90deg,#24405218 1px,transparent 1px);background-size:48px 48px}
+    .shell{max-width:1480px;margin:auto;padding:32px 24px 58px}.eyebrow{display:flex;align-items:center;gap:9px;text-transform:uppercase;letter-spacing:.17em;color:var(--mint);font-size:11px;font-weight:750}.dot{width:7px;height:7px;background:var(--mint);border-radius:99px;box-shadow:0 0 16px var(--mint)}
+    h1{font-size:clamp(30px,4.2vw,58px);line-height:1.12;letter-spacing:-.043em;margin:18px 0 12px;font-weight:800;max-width:990px}
+    h1 em{font-style:normal;background:linear-gradient(96deg,#51e9d6,#92b2ff 54%,#be9fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:17px;max-width:850px;color:#aec2d5;margin:0 0 27px}
+    .tags{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 26px}.tag{font-size:12px;color:#b6cadc;padding:6px 11px;border:1px solid #305169;border-radius:999px;background:#0b2132}
+    .metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px}.metric{padding:19px 21px;background:linear-gradient(150deg,#112739,#0b1b2a);border:1px solid var(--border);border-radius:16px;min-width:0}
+    .metric strong{display:block;font-size:32px;font-weight:800;letter-spacing:-.045em}.metric small{display:block;color:var(--muted);font-size:12px}.metric:nth-child(1) strong{color:var(--mint)}.metric:nth-child(2) strong{color:var(--violet)}
+    .panel{background:linear-gradient(160deg,#0e2131,#091726);border:1px solid #2a4558;border-radius:18px;overflow:hidden;box-shadow:0 22px 80px #0003}
+    .tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:17px 20px;border-bottom:1px solid #294458}
+    .tools label{color:#b0c4d6;display:flex;gap:8px;align-items:center;font-size:13px}
+    select,button{font:inherit;border:1px solid #37576b;border-radius:9px;background:#142c3d;color:#e8f6ff;padding:9px 13px;cursor:pointer}
+    button{font-size:12px;font-weight:650;padding:10px 13px;transition:background .15s,border-color .15s}
+    button:hover,select:hover{border-color:#77b9c5}button.active{color:#062324;background:#71ead7;border-color:#71ead7}button:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid white;outline-offset:3px}
+    .sep{width:1px;height:27px;background:#365064}.modes{display:flex;flex-wrap:wrap;gap:7px}
+    .canvas{position:relative;overflow-x:auto;background:radial-gradient(ellipse at 24% 40%,#0b39443d,transparent 39%),radial-gradient(ellipse at 78% 40%,#292b7540,transparent 44%)}
+    svg{display:block;width:100%;min-width:760px;height:auto}
+    .edge{transition:opacity .18s,stroke-width .18s;pointer-events:none}.node{cursor:pointer;outline:none}.node .disc{transition:stroke-width .15s,filter .15s}
+    .node:hover .disc{filter:brightness(1.3)}.node text{font-size:12px;font-weight:700;pointer-events:none}
+    .base{font-size:11px;font-weight:650;letter-spacing:.12em;fill:#97b5cc}
+    .legend{display:flex;flex-wrap:wrap;gap:18px;margin:0 20px 18px;color:#adbed1;font-size:12px}.legend span{display:flex;align-items:center;gap:7px}.sw{display:inline-block;width:17px;height:3px;border-radius:3px}.cluster1{background:#49e3cf}.cross{background:#78abf3}.cluster2{background:#a79dff}
+    .result{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:17px 20px;border-top:1px solid #294458;background:#0b1c2b;font-size:13px;color:#b8c9d8;min-height:70px}
+    .route{font-weight:800;font-size:14px;color:#a4ffee}.note{color:#94afc2}
+    .bottom{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;margin-top:20px}
+    .info{padding:22px 24px;border:1px solid #294557;border-radius:15px;background:#0e2030}.info h2{font-size:19px;letter-spacing:-.025em;margin:0 0 10px}.info p{margin:0;color:#afc3d5}
+    footer{color:#809fb5;font-size:12px;margin-top:22px}
+    @media(max-width:850px){.shell{padding:24px 13px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{padding:13px}.metric strong{font-size:27px}.tools{padding:14px}.sep{display:none}.bottom{grid-template-columns:1fr}.lead{font-size:15px}h1{font-size:32px}.legend{gap:9px}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <div class="eyebrow"><span class="dot"></span>RUTA · ВИЗУАЛИЗАЦИЯ ТОПОЛОГИИ</div>
+  <h1>Топология сети <em>full mesh</em></h1>
+  <p class="lead">В центре — внутренний кластер из 12 узлов. Вокруг — 6 внешних кластеров по 6 узлов. Все 48 узлов соединены каждый с каждым; выберите узел, чтобы выделить его 47 прямых соединений.</p>
+  <div class="tags"><span class="tag">Внутренний · 12 узлов</span><span class="tag">Внешние · 6 × 6 узлов</span><span class="tag">Каждый с каждым</span><span class="tag">Обходные маршруты</span><span class="tag">Интерактивный граф</span></div>
+  <section class="metrics" aria-label="Параметры сети">
+    <div class="metric"><strong>12</strong><small>узлов внутреннего кластера</small></div>
+    <div class="metric"><strong>6 × 6</strong><small>36 узлов во внешних кластерах</small></div>
+    <div class="metric"><strong>1128</strong><small>прямых соединений · 48 узлов всего</small></div>
+    <div class="metric"><strong>47</strong><small>прямых соседей у каждого узла</small></div>
+  </section>
+  <section class="panel" aria-label="Интерактивная топология">
+    <div class="tools">
+      <label>Откуда <select id="source" aria-label="Выбрать узел внутреннего кластера"></select></label>
+      <label>Куда <select id="destination" aria-label="Выбрать узел внешнего кластера"></select></label>
+      <label>Обход через <select id="via-cluster" aria-label="Выбрать внешний кластер для обхода"></select></label>
+      <div class="sep"></div>
+      <div class="modes" role="group" aria-label="Режимы визуализации">
+        <button data-mode="all">Все связи</button>
+        <button data-mode="neighbors">Соседи узла</button>
+        <button data-mode="short">Кратчайший путь</button>
+        <button data-mode="c1">Через внутренний</button>
+        <button data-mode="c2">Через внешний</button>
+      </div>
+    </div>
+    <div id="result" class="result" aria-live="polite"></div>
+    <div class="canvas"><svg id="graph" viewBox="0 0 1160 1000" role="img" aria-label="Full mesh: внутренний кластер из 12 узлов и 6 внешних кластеров по 6 узлов">
+      <defs>
+        <radialGradient id="bg"><stop stop-color="#152f49"/><stop offset="1" stop-color="#091929"/></radialGradient>
+        <filter id="glow" filterUnits="userSpaceOnUse" x="0" y="0" width="1160" height="1000"><feGaussianBlur stdDeviation="3" result="a"/><feMerge><feMergeNode in="a"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="route-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="#ffe08a"/></marker>
+        <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r=".7" fill="#4f7592" opacity=".16"/></pattern>
+      </defs>
+      <rect width="1160" height="1000" fill="url(#dots)"/>
+      <g id="clusters"></g>
+      <g id="links"></g><g id="route-links"></g><g id="nodes"></g>
+    </svg></div>
+    <div class="legend"><span><i class="sw cluster1"></i>Внутри центрального · 66</span><span><i class="sw cross"></i>Между кластерами · 972</span><span><i class="sw cluster2"></i>Внутри внешних · 6 × 15 = 90</span></div>
+  </section>
+  <div class="bottom">
+    <section class="info"><h2>12 внутри, 6 × 6 снаружи</h2><p>Внутренние узлы обозначены Ц-1…Ц-12. Внешние — В1-1…В6-6: первая цифра задаёт кластер, вторая — узел. Для обходного маршрута можно выбрать любой из шести внешних кластеров.</p></section>
+    <section class="info"><h2>Полная связность всех 48 узлов</h2><p>48 × 47 / 2 = 1128 связей. Из них 432 соединяют центр с внешними узлами, 540 — разные внешние кластеры, 156 — узлы внутри своих кластеров. Кратчайший путь между разными узлами — один переход.</p></section>
+  </div>
+  <footer>Демонстрационная топология: показаны только условные узлы и связи. Наличие обходных путей в модели не гарантирует доступность или качество реальной сети.</footer>
+</main>
+<script>
+"use strict";
+function createTopology() {
+  const nodes = [];
+  const links = [];
+  const keys = new Set();
+  for (let i = 1; i <= 12; i++) nodes.push({id:"Ц-"+i,type:"C1",cluster:"core"});
+  for (let c = 1; c <= 6; c++) for (let i = 1; i <= 6; i++)
+    nodes.push({id:"В"+c+"-"+i,type:"C2",cluster:"outer"+c});
+  function add(a,b,type) {
+    if (a === b) return;
+    const key = [a,b].sort().join(":");
+    if (!keys.has(key)) { keys.add(key); links.push({a,b,type,key}); }
+  }
+  for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+    const a=nodes[i],b=nodes[j];
+    add(a.id,b.id,a.cluster===b.cluster?a.type+"-"+b.type:"C1-C2");
+  }
+  return {nodes,links};
+}
+const topology = createTopology();
+const adj = Object.fromEntries(topology.nodes.map(n=>[n.id,new Set()]));
+for (const link of topology.links){adj[link.a].add(link.b);adj[link.b].add(link.a);}
+const pos = {};
+const clusterLayout=[{id:"core",x:580,y:500,r:155,label:"ВНУТРЕННИЙ · 12 УЗЛОВ"}];
+for(let i=0;i<12;i++){const t=2*Math.PI*i/12-Math.PI/2;pos["Ц-"+(i+1)]={x:580+118*Math.cos(t),y:500+118*Math.sin(t)};}
+for(let c=1;c<=6;c++){
+ const angle=2*Math.PI*(c-1)/6-Math.PI/2,x=580+395*Math.cos(angle),y=500+345*Math.sin(angle);
+ clusterLayout.push({id:"outer"+c,x,y,r:108,label:"ВНЕШНИЙ "+c+" · 6 УЗЛОВ"});
+ for(let i=0;i<6;i++){const t=2*Math.PI*i/6-Math.PI/2;pos["В"+c+"-"+(i+1)]={x:x+73*Math.cos(t),y:y+73*Math.sin(t)};}
+}
+const SVG="http://www.w3.org/2000/svg";
+function elem(tag,attrs){const el=document.createElementNS(SVG,tag);for(const [k,v] of Object.entries(attrs||{}))el.setAttribute(k,String(v));return el;}
+for(const c of clusterLayout){
+ const core=c.id==="core",color=core?"#49e3cf":"#a79dff";
+ const circle=elem("circle",{cx:c.x,cy:c.y,r:c.r,fill:color,"fill-opacity":.045,stroke:color,"stroke-opacity":.25});
+ const label=elem("text",{x:c.x,y:c.y-c.r-14,"text-anchor":"middle",class:"base"});label.textContent=c.label;
+ document.getElementById("clusters").append(circle,label);
+}
+function edgePath(a,b,curved=false){
+ const u=pos[a],v=pos[b],dx=v.x-u.x,dy=v.y-u.y,length=Math.hypot(dx,dy);
+ // Дуги разводят совпадающие участки обходного маршрута; концы находятся у края узлов.
+ const bend=curved?Math.min(110,length*.22):0;
+ const control={x:(u.x+v.x)/2-dy/length*bend,y:(u.y+v.y)/2+dx/length*bend};
+ function endpoint(p,id){const tx=control.x-p.x,ty=control.y-p.y,d=Math.hypot(tx,ty),r=id.startsWith("Ц-")?26:21;return {x:p.x+tx/d*r,y:p.y+ty/d*r};}
+ const start=endpoint(u,a),end=endpoint(v,b);
+ return `M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`;
+}
+const linkEls=[],nodeEls=new Map(),layer=document.getElementById("links"),routeLayer=document.getElementById("route-links");
+for(const l of topology.links){
+ const p=elem("path",{d:edgePath(l.a,l.b),fill:"none",stroke:l.type==="C1-C1"?"#49e3cf":l.type==="C2-C2"?"#a79dff":"#75b0fa","stroke-width":1.3,class:"edge","data-key":l.key});
+ layer.appendChild(p);linkEls.push({link:l,el:p});
+}
+const nodesLayer=document.getElementById("nodes");
+const source=document.getElementById("source"),destination=document.getElementById("destination"),result=document.getElementById("result");
+const viaCluster=document.getElementById("via-cluster");
+for(let c=1;c<=6;c++){
+ const option=document.createElement("option");option.value="В"+c+"-";option.textContent="Внешний "+c;viaCluster.appendChild(option);
+ const group=document.createElement("optgroup");group.label="Внешний "+c;group.id="options-outer"+c;destination.appendChild(group);
+}
+for(const n of topology.nodes){
+ const sel=document.createElement("option");sel.value=n.id;sel.textContent=n.id;
+ (n.type==="C1"?source:document.getElementById("options-"+n.cluster)).appendChild(sel);
+ const p=pos[n.id],g=elem("g",{class:"node",tabindex:0,role:"button","aria-label":"Показать соседей узла "+n.id});
+ const halo=elem("circle",{cx:p.x,cy:p.y,r:n.type==="C1"?22:17,fill:n.type==="C1"?"#153f44":"#242b53",stroke:n.type==="C1"?"#58e4d3":"#aa9bff","stroke-width":1.6,class:"disc"});
+ const txt=elem("text",{x:p.x,y:p.y+4,"text-anchor":"middle",fill:"#edf8ff"});txt.textContent=n.id;g.append(halo,txt);nodesLayer.append(g);nodeEls.set(n.id,g);
+ function choose(){if(n.type==="C1"){source.value=n.id;}else{destination.value=n.id;}mode="neighbors";focus=n.id;render();}
+ g.addEventListener("click",choose);g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();choose();}});
+}
+source.value="Ц-1";destination.value="В1-1";
+let mode="all",focus="Ц-1";
+function findRoute(start,end,via){
+ if(start===end)return via?null:[start];
+ if(!via&&adj[start].has(end))return [start,end];
+ if(via){
+  const intermediate=[...adj[start]].filter(id=>id!==end&&id.startsWith(via)&&adj[id].has(end))
+   .sort((a,b)=>a.localeCompare(b,"ru",{numeric:true}))[0];
+  if(intermediate)return [start,intermediate,end];
+ }
+ const queue=[[[start],false]],visited=new Set([start+"|false"]);
+ for(let idx=0;idx<queue.length;idx++){
+  const [path,used]=queue[idx],at=path[path.length-1];
+  if(at===end&&(!via||used))return path;
+  const nexts=[...adj[at]].sort((a,b)=>a.localeCompare(b,"ru",{numeric:true}));
+  for(const next of nexts){
+   if(path.includes(next))continue;
+   const passed=used||(next!==end&&next!==start&&next.startsWith(via||"__"));
+   const key=next+"|"+passed;
+   if(!visited.has(key)){visited.add(key);queue.push([[...path,next],passed]);}
+  }
+ }
+ return null;
+}
+function render(){
+ const start=source.value,end=destination.value;
+ const via=mode==="c1"?"Ц-":mode==="c2"?viaCluster.value:null;
+ const path=["short","c1","c2"].includes(mode)?findRoute(start,end,via):null;
+ const traversed=new Map(),highlighted=new Set(path||[]);
+ if(path)for(let i=0;i<path.length-1;i++)traversed.set([path[i],path[i+1]].sort().join(":"),[path[i],path[i+1]]);
+ for(const {link,el} of linkEls){
+  let opacity=mode==="all"?(link.type==="C1-C2"?.20:.32):.025,weight=1.1;
+  if(mode==="neighbors"&&(link.a===focus||link.b===focus)){opacity=.95;weight=2.4;}
+  const route=traversed.get(link.key);
+  if(route){opacity=1;weight=4;}
+  el.style.opacity=String(opacity);el.setAttribute("stroke-width",weight);
+  el.setAttribute("stroke",route?"#ffe08a":link.type==="C1-C1"?"#49e3cf":link.type==="C2-C2"?"#a79dff":"#75b0fa");
+  el.setAttribute("d",route?edgePath(route[0],route[1],path.length>2):edgePath(link.a,link.b));
+  const target=route?routeLayer:layer;if(el.parentNode!==target)target.appendChild(el);
+  if(route){el.setAttribute("filter","url(#glow)");el.setAttribute("marker-end","url(#route-arrow)");}
+  else {el.removeAttribute("filter");el.removeAttribute("marker-end");}
+ }
+ for(const [id,g] of nodeEls){
+  const active=mode==="all"||mode==="neighbors"&&(id===focus||adj[focus].has(id))||path&&highlighted.has(id);
+  g.style.opacity=active?"1":".30";
+  g.querySelector(".disc").setAttribute("stroke-width",id===focus||highlighted.has(id)?"3.6":"1.6");
+ }
+ for(const b of document.querySelectorAll("[data-mode]")){b.classList.toggle("active",b.dataset.mode===mode);b.setAttribute("aria-pressed",String(b.dataset.mode===mode));}
+ result.replaceChildren();
+ function chunk(text,cls){const span=document.createElement("span");span.className=cls||"";span.textContent=text;result.append(span);}
+ if(path){chunk(path.join(" → "),"route");chunk("Переходов: "+(path.length-1));chunk("Расчёт по структуре графа, без измерений каналов.","note");}
+ else if(mode==="all"){chunk("Все 1128 соединений full mesh","route");chunk("66 внутри центрального · 90 внутри внешних · 972 между кластерами");}
+ else if(mode==="neighbors"){chunk("Соседи "+focus+" · "+adj[focus].size,"route");chunk([...adj[focus]].sort((a,b)=>a.localeCompare(b,"ru",{numeric:true})).join(", "));}
+ else chunk("Маршрут не найден в проектном графе.","note");
+}
+for(const b of document.querySelectorAll("[data-mode]"))b.addEventListener("click",()=>{mode=b.dataset.mode;focus=source.value;render();});
+for(const s of [source,destination])s.addEventListener("change",()=>{focus=s.value;render();});
+viaCluster.addEventListener("change",()=>{mode="c2";render();});
+render();
+</script>
+</body>
+</html>
